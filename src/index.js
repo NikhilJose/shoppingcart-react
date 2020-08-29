@@ -1,0 +1,42 @@
+import React from "react";
+import ReactDOM from "react-dom";
+import "./index.css";
+import App from "./App";
+import { BrowserRouter } from "react-router-dom";
+import { Provider } from "react-redux";
+import { createStore, combineReducers, applyMiddleware, compose } from "redux";
+import thunk from "redux-thunk";
+
+import cartReducer from "./store/reducers/cartReducer";
+import productListReducer from "./store/reducers/productReducer";
+import {orderCreateReducer,myOrderListReducer} from "./store/reducers/orderReducers";
+
+const rootReducer = combineReducers({
+  productList: productListReducer,
+  cart: cartReducer,
+  order: orderCreateReducer,
+  myOrderList: myOrderListReducer,
+});
+
+const cartItems = JSON.parse(localStorage.getItem("cartItems")) || [];
+
+const persistedState = {
+  cart: { cartItems, shipping: {}, payment: {} },
+};
+
+const composeEnhancer = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
+
+const store = createStore(
+  rootReducer,
+  persistedState,
+  composeEnhancer(applyMiddleware(thunk))
+);
+
+ReactDOM.render(
+  <Provider store={store}>
+    <BrowserRouter>
+      <App />
+    </BrowserRouter>
+  </Provider>,
+  document.getElementById("root")
+);
