@@ -1,7 +1,7 @@
 import axios from "axios";
 import authHeader from "./auth-header";
 
-const API_URL = "/api/order/";
+const API_URL = "https://fullstack-shoppingcart.herokuapp.com/api/order/";
 
 class OrderService {
   createOrder(order) {
