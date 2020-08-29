@@ -22,6 +22,12 @@ class AdminService {
     );
   }
 
+  uploadImage(uploadData) {
+    return axios.post(API_URL + "upload", uploadData, {
+      headers: authHeader(),
+    });
+  }
+
   getProducts() {
     return axios.get(API_URL + "products", { headers: authHeader() });
   }

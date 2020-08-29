@@ -2,8 +2,6 @@ import React, { Component } from "react";
 import Form from "react-validation/build/form";
 import Input from "react-validation/build/input";
 
-import axios from "axios";
-import authHeader from "../services/auth-header";
 import AdminService from "../services/admin-service";
 
 const required = (value) => {
@@ -80,24 +78,20 @@ class CreateProduct extends Component {
       this.state.selectedFile,
       this.state.selectedFile.name
     );
-    axios
-      .post("http://localhost:8080/api/admin/upload", uploadData, {
-        headers: authHeader(),
-      })
-      .then((response) => {
-        if (response.status === 200) {
-          AdminService.addProduct(
-            this.state.name,
-            this.state.category,
-            this.state.price
-          );
-        }
-        this.setState({
-          message: response.data.message,
-          successful: true,
-        });
-        window.location.reload();
+    AdminService.uploadImage(uploadData).then((response) => {
+      if (response.status === 200) {
+        AdminService.addProduct(
+          this.state.name,
+          this.state.category,
+          this.state.price
+        );
+      }
+      this.setState({
+        message: response.data.message,
+        successful: true,
       });
+      window.location.reload();
+    });
   }
 
   render() {
